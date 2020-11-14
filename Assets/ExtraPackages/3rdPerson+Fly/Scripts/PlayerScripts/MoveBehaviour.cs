@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 // MoveBehaviour inherits from GenericBehaviour. This class corresponds to basic walk and run behaviour, it is the default behaviour.
 public class MoveBehaviour : GenericBehaviour
 {
+    public Image staminaBar;
+    public float staminaDepletion, staminaRecovery;
     public bool canMove = true;
     public bool canJump = false;
 	public float walkSpeed = 0.15f;                 // Default walk speed.
@@ -13,7 +16,7 @@ public class MoveBehaviour : GenericBehaviour
 	public float jumpHeight = 1.5f;                 // Default jump height.
 	public float jumpIntertialForce = 10f;          // Default horizontal inertial force when jumping.
 
-	private float speed, speedSeeker;               // Moving speed.
+	private float speed, speedSeeker, stamina;               // Moving speed.
 	private int jumpBool;                           // Animator variable related to jumping.
 	private int groundedBool;                       // Animator variable related to whether or not the player is on ground.
 	private bool jump;                              // Boolean to determine whether or not the player started a jump.
@@ -31,6 +34,7 @@ public class MoveBehaviour : GenericBehaviour
 		behaviourManager.SubscribeBehaviour(this);
 		behaviourManager.RegisterDefaultBehaviour(this.behaviourCode);
 		speedSeeker = runSpeed;
+        stamina = 100;
 	}
 
 	// Update is used to set features regardless the active behaviour.
@@ -126,7 +130,14 @@ public class MoveBehaviour : GenericBehaviour
 		speedSeeker += Input.GetAxis("Mouse ScrollWheel");
 		speedSeeker = Mathf.Clamp(speedSeeker, walkSpeed, runSpeed);
 		speed *= speedSeeker;
-		if (behaviourManager.IsSprinting())
+
+        stamina += Time.deltaTime * (speed > 0.5f ? -staminaDepletion : staminaRecovery) * (behaviourManager.IsSprinting() ? 2 : 1);
+        stamina = Mathf.Clamp(stamina, 0, 100);
+        Vector3 tmp = staminaBar.transform.localScale;
+        tmp.x = stamina / 100;
+        staminaBar.transform.localScale = tmp;
+
+        if (behaviourManager.IsSprinting())
 		{
 			speed = sprintSpeed;
 		}
