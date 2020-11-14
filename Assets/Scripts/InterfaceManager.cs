@@ -60,7 +60,6 @@ public class InterfaceManager : MonoBehaviour
 
     public void StartDialogue()
     {
-        print("Hey i start");
         inDialogue = true;
         canvasGroup.alpha = 1;
         dialogueIndex = 0;
@@ -86,7 +85,7 @@ public class InterfaceManager : MonoBehaviour
     public void ResetState()
     {
         //currentVillager.Reset();
-        //FindObjectOfType<MovementInput>().active = true;
+        FindObjectOfType<MoveBehaviour>().canMove = true;
         canExit = false;
         inDialogue = false;
 

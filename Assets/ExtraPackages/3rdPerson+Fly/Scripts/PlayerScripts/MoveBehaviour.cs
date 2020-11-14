@@ -3,6 +3,8 @@
 // MoveBehaviour inherits from GenericBehaviour. This class corresponds to basic walk and run behaviour, it is the default behaviour.
 public class MoveBehaviour : GenericBehaviour
 {
+    public bool canMove = true;
+    public bool canJump = false;
 	public float walkSpeed = 0.15f;                 // Default walk speed.
 	public float runSpeed = 1.0f;                   // Default run speed.
 	public float sprintSpeed = 2.0f;                // Default sprint speed.
@@ -17,8 +19,8 @@ public class MoveBehaviour : GenericBehaviour
 	private bool jump;                              // Boolean to determine whether or not the player started a jump.
 	private bool isColliding;                       // Boolean to determine if the player has collided with an obstacle.
 
-	// Start is always called after any Awake functions.
-	void Start()
+    // Start is always called after any Awake functions.
+    void Start()
 	{
 		// Set up the references.
 		jumpBool = Animator.StringToHash("Jump");
@@ -37,18 +39,22 @@ public class MoveBehaviour : GenericBehaviour
 		// Get jump input.
 		if (!jump && Input.GetButtonDown(jumpButton) && behaviourManager.IsCurrentBehaviour(this.behaviourCode) && !behaviourManager.IsOverriding())
 		{
-			//jump = true;
+			jump = true;
 		}
 	}
 
 	// LocalFixedUpdate overrides the virtual function of the base class.
 	public override void LocalFixedUpdate()
 	{
-		// Call the basic movement manager.
-		MovementManagement(behaviourManager.GetH, behaviourManager.GetV);
+        // Call the basic movement manager.
+        if (canMove)
+            MovementManagement(behaviourManager.GetH, behaviourManager.GetV);
+        else
+            MovementManagement(0, 0);
 
 		// Call the jump manager.
-		JumpManagement();
+        if (canJump)
+		    JumpManagement();
 	}
 
 	// Execute the idle and walk/run jump movements.
