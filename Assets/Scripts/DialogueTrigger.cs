@@ -6,6 +6,7 @@ public class DialogueTrigger : MonoBehaviour
 {
     private InterfaceManager ui;
     private Villager currentVillager = null;
+    private Villager goalVillager;
     private MoveBehaviour mb;
     // Start is called before the first frame update
     void Start()

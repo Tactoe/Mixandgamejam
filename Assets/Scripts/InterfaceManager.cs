@@ -9,17 +9,21 @@ public class InterfaceManager : MonoBehaviour
     public bool inDialogue;
 
     public static InterfaceManager instance;
-    public CanvasGroup canvasGroup;
+    public CanvasGroup dialogueCG, QuestCG;
     public TMP_Animated animatedText;
     public Image nameBubble;
-    public TextMeshProUGUI nameTMP;
+    public TextMeshProUGUI nameTMP, questTMP, finishedQuestTMP;
 
     public DialogueData currentDialogue;
 
     public GameObject gameCam;
     public GameObject dialogueCam;
 
+    public Villager currentVillager;
     private int dialogueIndex;
+    private string targetVillager;
+    private bool questOngoing;
+    private int questsDone;
     public bool canExit;
     public bool nextDialogue;
 
@@ -48,7 +52,8 @@ public class InterfaceManager : MonoBehaviour
             }
             else if (canExit)
             {
-                canvasGroup.alpha = 0;
+                dialogueCG.alpha = 0;
+                StartQuest();
                 Invoke("ResetState", 0.2f);
             }
             else if (nextDialogue)
@@ -58,10 +63,53 @@ public class InterfaceManager : MonoBehaviour
         }
     }
 
+    public void CheckQuestStatus()
+    {
+        if (questOngoing)
+        {
+            EndQuest();
+        }
+        else
+        {
+            StartQuest();
+        }
+    }
+
+    public void StartQuest()
+    {
+        questOngoing = true;
+        List<GameObject> villagers = new List<GameObject>();
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Villager"))
+        {
+            if (g != currentVillager.gameObject)
+                villagers.Add(g);
+        }
+        Villager v = villagers[Random.Range(0, villagers.Count)].GetComponent<Villager>();
+        QuestCG.alpha = 1;
+        targetVillager = v.data.name;
+        questTMP.text = "Bring stuff to <color=red>" + targetVillager + "</color>";
+    }
+
+    public void EndQuest()
+    {
+        List<GameObject> villagers = new List<GameObject>();
+        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Villager"))
+        {
+            if (g != currentVillager.gameObject)
+                villagers.Add(g);
+        }
+        Villager v = villagers[Random.Range(0, villagers.Count)].GetComponent<Villager>();
+        QuestCG.alpha = 1;
+        finishedQuestTMP.text = "Quest accomplished: " + questsDone;
+        questOngoing = true;
+    }
+
+    // ========== DIALOGUE UI =================
+
     public void StartDialogue()
     {
         inDialogue = true;
-        canvasGroup.alpha = 1;
+        dialogueCG.alpha = 1;
         dialogueIndex = 0;
         animatedText.ReadText(currentDialogue.conversationBlock[0]);
     }
@@ -80,6 +128,7 @@ public class InterfaceManager : MonoBehaviour
             nameBubble.color = v.data.villagerColor;
         }
         currentDialogue = v.dialogues;
+        currentVillager = v;
     }
 
     public void ResetState()
