@@ -9,7 +9,7 @@ public class InterfaceManager : MonoBehaviour
     public bool inDialogue;
 
     public static InterfaceManager instance;
-    public CanvasGroup dialogueCG, QuestCG;
+    public CanvasGroup dialogueCG, questCG;
     public TMP_Animated animatedText;
     public Image nameBubble;
     public TextMeshProUGUI nameTMP, questTMP, finishedQuestTMP;
@@ -52,15 +52,27 @@ public class InterfaceManager : MonoBehaviour
             }
             else if (canExit)
             {
-                dialogueCG.alpha = 0;
-                StartQuest();
-                Invoke("ResetState", 0.2f);
+                CloseDialogue();
             }
             else if (nextDialogue)
             {
                 animatedText.ReadText(currentDialogue.conversationBlock[dialogueIndex]);
             }
         }
+    }
+
+    void CloseDialogue()
+    {
+        dialogueCG.alpha = 0;
+        CheckQuestStatus();
+        Invoke("ResetState", 0.2f);
+    }
+
+    public void StartInteraction(Villager v)
+    {
+        SetDialogueData(currentVillager);
+        ClearText();
+        StartDialogue();
     }
 
     public void CheckQuestStatus()
@@ -85,23 +97,21 @@ public class InterfaceManager : MonoBehaviour
                 villagers.Add(g);
         }
         Villager v = villagers[Random.Range(0, villagers.Count)].GetComponent<Villager>();
-        QuestCG.alpha = 1;
+        questCG.alpha = 1;
         targetVillager = v.data.name;
         questTMP.text = "Bring stuff to <color=red>" + targetVillager + "</color>";
     }
 
     public void EndQuest()
     {
-        List<GameObject> villagers = new List<GameObject>();
-        foreach (GameObject g in GameObject.FindGameObjectsWithTag("Villager"))
+        if (targetVillager == currentVillager.data.name)
         {
-            if (g != currentVillager.gameObject)
-                villagers.Add(g);
+            questsDone++;
+            finishedQuestTMP.text = "Errands completed: " + questsDone;
+            questOngoing = false;
+            targetVillager = "";
+            questCG.alpha = 0;
         }
-        Villager v = villagers[Random.Range(0, villagers.Count)].GetComponent<Villager>();
-        QuestCG.alpha = 1;
-        finishedQuestTMP.text = "Quest accomplished: " + questsDone;
-        questOngoing = true;
     }
 
     // ========== DIALOGUE UI =================
@@ -137,7 +147,6 @@ public class InterfaceManager : MonoBehaviour
         FindObjectOfType<MoveBehaviour>().canMove = true;
         canExit = false;
         inDialogue = false;
-
     }
 
     public void FinishDialogue()
