@@ -7,11 +7,11 @@ public class DialogueTrigger : MonoBehaviour
     private InterfaceManager ui;
     private Villager currentVillager = null;
     private Villager goalVillager;
-    private MoveBehaviour mb;
+    private MovementInput mi;
     // Start is called before the first frame update
     void Start()
     {
-        mb = GetComponent<MoveBehaviour>();
+        mi = GetComponent<MovementInput>();
         ui = InterfaceManager.instance;
     }
 
@@ -21,10 +21,9 @@ public class DialogueTrigger : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !ui.inDialogue && currentVillager != null)
         {
 
-            mb.canMove = false;
-            ui.SetDialogueData(currentVillager);
-            ui.ClearText();
-            ui.StartDialogue();
+            mi.canMove = false;
+            
+            ui.StartInteraction(currentVillager);
         }
     }
 

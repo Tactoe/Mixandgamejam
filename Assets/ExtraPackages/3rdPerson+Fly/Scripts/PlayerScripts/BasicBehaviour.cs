@@ -52,7 +52,7 @@ public class BasicBehaviour : MonoBehaviour
 		anim = GetComponent<Animator> ();
 		hFloat = Animator.StringToHash("H");
 		vFloat = Animator.StringToHash("V");
-		camScript = playerCamera.GetComponent<ThirdPersonOrbitCamBasic> ();
+		//camScript = playerCamera.GetComponent<ThirdPersonOrbitCamBasic> ();
 		rBody = GetComponent<Rigidbody> ();
 
 		// Grounded verification variables.
@@ -74,16 +74,16 @@ public class BasicBehaviour : MonoBehaviour
 		sprint = Input.GetButton (sprintButton);
 
 		// Set the correct camera FOV for sprint mode.
-		if(IsSprinting())
-		{
-			changedFOV = true;
-			camScript.SetFOV(sprintFOV);
-		}
-		else if(changedFOV)
-		{
-			camScript.ResetFOV();
-			changedFOV = false;
-		}
+		//if(IsSprinting())
+		//{
+		//	changedFOV = true;
+		//	camScript.SetFOV(sprintFOV);
+		//}
+		//else if(changedFOV)
+		//{
+		//	camScript.ResetFOV();
+		//	changedFOV = false;
+		//}
 		// Set the grounded test on the Animator Controller.
 		anim.SetBool(groundedBool, IsGrounded());
 	}

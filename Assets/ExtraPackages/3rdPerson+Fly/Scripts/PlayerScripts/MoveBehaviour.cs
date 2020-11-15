@@ -137,7 +137,7 @@ public class MoveBehaviour : GenericBehaviour
         tmp.x = stamina / 100;
         staminaBar.transform.localScale = tmp;
 
-        if (behaviourManager.IsSprinting())
+        if (canMove && behaviourManager.IsSprinting())
 		{
 			speed = sprintSpeed;
 		}
@@ -156,11 +156,12 @@ public class MoveBehaviour : GenericBehaviour
 	// Rotate the player to match correct orientation, according to camera and key pressed.
 	Vector3 Rotating(float horizontal, float vertical)
 	{
-		// Get camera forward direction, without vertical component.
-		Vector3 forward = behaviourManager.playerCamera.TransformDirection(Vector3.forward);
+        // Get camera forward direction, without vertical component.
+        Vector3 forward = behaviourManager.playerCamera.TransformDirection(Vector3.forward);
+        //Vector3 forward = Vector3.forward;
 
-		// Player is moving on ground, Y component of camera facing is not relevant.
-		forward.y = 0.0f;
+        // Player is moving on ground, Y component of camera facing is not relevant.
+        forward.y = 0.0f;
 		forward = forward.normalized;
 
 		// Calculate target direction based on camera forward and direction key.

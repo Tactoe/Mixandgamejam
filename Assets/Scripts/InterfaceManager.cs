@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class InterfaceManager : MonoBehaviour
@@ -26,6 +27,7 @@ public class InterfaceManager : MonoBehaviour
     private int questsDone;
     public bool canExit;
     public bool nextDialogue;
+    bool isInCutscene;
 
     private void Awake()
     {
@@ -37,6 +39,7 @@ public class InterfaceManager : MonoBehaviour
         animatedText.onDialogueFinish.AddListener(() => FinishDialogue());
         if (currentDialogue != null)
         {
+            isInCutscene = true;
             StartDialogue();
         }
     }
@@ -64,13 +67,20 @@ public class InterfaceManager : MonoBehaviour
     void CloseDialogue()
     {
         dialogueCG.alpha = 0;
-        CheckQuestStatus();
-        Invoke("ResetState", 0.2f);
+        if (isInCutscene)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        else
+        {
+            CheckQuestStatus();
+            Invoke("ResetState", 0.2f);
+        }
     }
 
     public void StartInteraction(Villager v)
     {
-        SetDialogueData(currentVillager);
+        SetDialogueData(v);
         ClearText();
         StartDialogue();
     }
