@@ -109,7 +109,7 @@ public class InterfaceManager : MonoBehaviour
         Villager v = villagers[Random.Range(0, villagers.Count)].GetComponent<Villager>();
         questCG.alpha = 1;
         targetVillager = v.data.name;
-        questTMP.text = "Bring stuff to <color=red>" + targetVillager + "</color>";
+        questTMP.text = "Bring stuff to <color=#" + ColorUtility.ToHtmlStringRGB(v.data.villagerColor) + ">" + targetVillager + "</color>";
     }
 
     public void EndQuest()
@@ -154,7 +154,7 @@ public class InterfaceManager : MonoBehaviour
     public void ResetState()
     {
         //currentVillager.Reset();
-        FindObjectOfType<MoveBehaviour>().canMove = true;
+        FindObjectOfType<MovementInput>().canMove = true;
         canExit = false;
         inDialogue = false;
     }

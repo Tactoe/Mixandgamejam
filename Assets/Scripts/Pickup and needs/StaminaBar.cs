@@ -9,6 +9,8 @@ public class StaminaBar : MonoBehaviour
     Image staminaBar;
     public float staminaDepletion, staminaRecovery;
     public MovementInput mi;
+    public NeedBar nb;
+    bool isRefilling;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +20,22 @@ public class StaminaBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        stamina += Time.deltaTime * (mi.Speed > 0.5f ? -staminaDepletion : staminaRecovery) * (mi.isSprinting ? 2 : 1);
-        stamina = Mathf.Clamp(stamina, 0, 100);
+        if (stamina < 0.1f)
+        {
+            isRefilling = true;
+            mi.canMove = false;
+        }
+        float staminaChange = Time.deltaTime * (mi.Speed > 0.5f ? -staminaDepletion : staminaRecovery / (isRefilling ? 2 : 1));
+        if (mi.isSprinting)
+            staminaChange *= 2;
+        stamina += staminaChange;
+        float staminaCap = nb.getNeedCap();
+        stamina = Mathf.Clamp(stamina, 0, staminaCap);
+        if (stamina > staminaCap - 1)
+        {
+            isRefilling = false;
+            mi.canMove = true;
+        }
         Vector3 tmp = staminaBar.transform.localScale;
         tmp.x = stamina / 100;
         staminaBar.transform.localScale = tmp;

@@ -54,8 +54,8 @@ public class MovementInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (canMove)
-		    InputMagnitude();
+
+		InputMagnitude();
 
         isGrounded = controller.isGrounded;
         if (isGrounded)
@@ -116,12 +116,17 @@ public class MovementInput : MonoBehaviour {
 		//Calculate Input Vectors
 		InputX = Input.GetAxis ("Horizontal");
 		InputZ = Input.GetAxis ("Vertical");
+        if (!canMove)
+        {
+            InputX = 0;
+            InputZ = 0;
+        }
 
-		//anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
-		//anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
+        //anim.SetFloat ("InputZ", InputZ, VerticalAnimTime, Time.deltaTime * 2f);
+        //anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
 
-		//Calculate the Input Magnitude
-		Speed = new Vector2(InputX, InputZ).sqrMagnitude;
+        //Calculate the Input Magnitude
+        Speed = new Vector2(InputX, InputZ).sqrMagnitude;
 
         //Physically move player
 

@@ -34,6 +34,16 @@ public class NeedBar : MonoBehaviour
         }
     }
 
+    public float getNeedCap()
+    {
+        float needCap = 0;
+        foreach(float n in needs)
+        {
+            needCap += n;
+        }
+        return needCap / needs.Count;
+    }
+
     public void RefillNeed(string need, float value)
     {
         int needIndex = 0;
