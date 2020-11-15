@@ -47,17 +47,9 @@ public class NeedBar : MonoBehaviour
         return needCap / needs.Count;
     }
 
-    public void RefillNeed(string need, float value)
+    public void RefillNeed( float[] value)
     {
-        int needIndex = 0;
-        if (need == "thirst")
-            needIndex = 0;
-        if (need == "hunger")
-            needIndex = 1;
-        if (need == "fun")
-            needIndex = 2;
-        if (need == "affection")
-            needIndex = 3;
-        needs[needIndex] += value;
+        for (int i = 1; i < value.Length; i++)
+            needs[i - 1] += value[i];
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DialogueTrigger : MonoBehaviour
 {
@@ -8,9 +9,11 @@ public class DialogueTrigger : MonoBehaviour
     private Villager currentVillager = null;
     private Villager goalVillager;
     private MovementInput mi;
+    CanvasGroup talkTipCG;
     // Start is called before the first frame update
     void Start()
     {
+        talkTipCG = GameObject.FindGameObjectWithTag("TalkTip").GetComponent<CanvasGroup>();
         mi = GetComponent<MovementInput>();
         ui = InterfaceManager.instance;
     }
@@ -20,7 +23,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && !ui.inDialogue && currentVillager != null)
         {
-
+            talkTipCG.alpha = 0;
             mi.canMove = false;
             
             ui.StartInteraction(currentVillager);
@@ -31,6 +34,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (other.CompareTag("Villager"))
         {
+            talkTipCG.alpha = 1;
             currentVillager = other.GetComponent<Villager>();
         }
     }
@@ -39,6 +43,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (other.CompareTag("Villager"))
         {
+            talkTipCG.alpha = 0;
             currentVillager = null;
         }
     }
