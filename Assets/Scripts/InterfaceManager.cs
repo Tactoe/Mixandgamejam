@@ -13,13 +13,15 @@ public class InterfaceManager : MonoBehaviour
     public CanvasGroup dialogueCG, questCG;
     public TMP_Animated animatedText;
     public Image nameBubble;
-    public TextMeshProUGUI nameTMP, questTMP, finishedQuestTMP;
+    public float timerDuration;
+    public TextMeshProUGUI nameTMP, questTMP, finishedQuestTMP, timerTMP;
 
     public DialogueData currentDialogue;
 
     public GameObject gameCam;
     public GameObject dialogueCam;
 
+    float timer;
     public Villager currentVillager;
     private int dialogueIndex;
     private string targetVillager;
@@ -36,6 +38,7 @@ public class InterfaceManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        timer = timerDuration;
         animatedText.onDialogueFinish.AddListener(() => FinishDialogue());
         if (currentDialogue != null)
         {
@@ -62,6 +65,13 @@ public class InterfaceManager : MonoBehaviour
                 animatedText.ReadText(currentDialogue.conversationBlock[dialogueIndex]);
             }
         }
+        HandleTimer();
+    }
+
+    void HandleTimer()
+    {
+        timer -= Time.deltaTime;
+        timerTMP.text = "Time before\nnext judgment: " + (Mathf.Round(timer * 100)) / 100.0;
     }
 
     void CloseDialogue()
@@ -110,6 +120,7 @@ public class InterfaceManager : MonoBehaviour
         questCG.alpha = 1;
         targetVillager = v.data.name;
         questTMP.text = "Bring stuff to <color=#" + ColorUtility.ToHtmlStringRGB(v.data.villagerColor) + ">" + targetVillager + "</color>";
+        FindObjectOfType<SpawnerManager>().SpawnPickups();
     }
 
     public void EndQuest()

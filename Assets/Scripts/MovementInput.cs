@@ -126,7 +126,7 @@ public class MovementInput : MonoBehaviour {
         //anim.SetFloat ("InputX", InputX, HorizontalAnimSmoothTime, Time.deltaTime * 2f);
 
         //Calculate the Input Magnitude
-        Speed = new Vector2(InputX, InputZ).sqrMagnitude;
+        Speed = new Vector2(InputX, InputZ).sqrMagnitude * (isSprinting ? 2 : 1);
 
         //Physically move player
 

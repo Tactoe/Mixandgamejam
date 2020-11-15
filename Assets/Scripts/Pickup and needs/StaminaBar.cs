@@ -25,7 +25,7 @@ public class StaminaBar : MonoBehaviour
             isRefilling = true;
             mi.canMove = false;
         }
-        float staminaChange = Time.deltaTime * (mi.Speed > 0.5f ? -staminaDepletion : staminaRecovery / (isRefilling ? 2 : 1));
+        float staminaChange = Time.deltaTime * (mi.Speed > 0.7f ? -staminaDepletion : staminaRecovery);
         if (mi.isSprinting)
             staminaChange *= 2;
         stamina += staminaChange;

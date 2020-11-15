@@ -10,10 +10,11 @@ public class SpawnerManager : MonoBehaviour
     void Start()
     {
         spawners = GetComponentsInChildren<PickupSpawner>();
+        SpawnPickups();
     }
 
     [ContextMenu("Do Something")]
-    void SpawnPickups()
+    public void SpawnPickups()
     {
         int singleSpawnAmount = pickupAmount / spawners.Length;
         foreach (PickupSpawner ps in spawners)

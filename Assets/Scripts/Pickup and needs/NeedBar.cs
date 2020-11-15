@@ -15,9 +15,12 @@ public class NeedBar : MonoBehaviour
     {
         foreach(Image img in GetComponentsInChildren<Image>())
         {
-            needs.Add(100);
-            needBars.Add(img);
-            maxSize.Add(img.rectTransform.sizeDelta.x);
+            if (img.CompareTag("NeedBar"))
+            {
+                needs.Add(100);
+                needBars.Add(img);
+                maxSize.Add(img.rectTransform.sizeDelta.x);
+            }
         }
     }
 
@@ -47,9 +50,9 @@ public class NeedBar : MonoBehaviour
     public void RefillNeed(string need, float value)
     {
         int needIndex = 0;
-        if (need == "hunger")
-            needIndex = 0;
         if (need == "thirst")
+            needIndex = 0;
+        if (need == "hunger")
             needIndex = 1;
         if (need == "fun")
             needIndex = 2;
